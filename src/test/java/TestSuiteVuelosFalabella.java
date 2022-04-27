@@ -1,8 +1,5 @@
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -14,6 +11,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.List;
 
 
 public class TestSuiteVuelosFalabella {
@@ -35,6 +33,7 @@ public class TestSuiteVuelosFalabella {
     public By localizadorEquipajeMano = By.xpath("(//i[@class=\"checkbox-check eva-3-icon-checkmark filters-checkbox-left\"])[5]");
     public By localizadorUsd = By.xpath("(//i[@class=\"radio-circle\"])[2]");
     public By localizadorComprarPrimero = By.xpath("(//em[text() =\"Comprar\"])[1]");
+    public By localizadorMetodosPago = By.xpath("//div[@class=\"eva-3-card -eva-3-shadow-line frame payment-method\"]/descendant::span[@class=\"payment-method-aligned\"]");
     @BeforeClass
     public static void init(){
         WebDriverManager.chromedriver().setup();
@@ -145,6 +144,7 @@ public class TestSuiteVuelosFalabella {
         int añoViajeVuelta = 2022;
         String origen = "SCL";
         String destino = "VLN";
+        String metodoPago = "";
         //Abrir la pagina
 
         FluentWait<WebDriver> wait = new FluentWait<>(driver)
@@ -264,6 +264,12 @@ public class TestSuiteVuelosFalabella {
         }
         WebElement comprarPrimero = driver.findElement(localizadorComprarPrimero);
         comprarPrimero.click();
+        List<WebElement> pagos = driver.findElements(localizadorMetodosPago);
+        wait.until(ExpectedConditions.elementToBeClickable(pagos.get(0)));
+        if (pagos.size() == 1){
+            metodoPago = pagos.get(0).getText();
+        }
+        Assert.assertEquals(metodoPago, "Tarjeta de crédito");
 
     }
 
@@ -271,9 +277,10 @@ public class TestSuiteVuelosFalabella {
 
     @After
     public void close(){
-      /* if(driver != null){
+        if(driver != null){
             driver.close();
-        }*/
+
+        }
     }
 
 
