@@ -7,6 +7,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -28,6 +30,7 @@ public class TestSuitePaquetesFalabella {
     public By localizadorAumentarAdultos = By.xpath("(//a[@class = \"steppers-icon-right sbox-3-icon-plus\"])[3]");
     public By localizadorBtnAplicarPasajeros = By.xpath("(//a[text() =\"Aplicar\"])[2]");
     public By localizadorBtnBuscar = By.xpath("(//div [@class = \"sbox-button-container\"] )[1]");
+    public By localizadorBtnCookie = By.xpath("//a[@class=\"lgpd-banner--button eva-3-btn -white -md\"]");
     @BeforeClass
     public static void init(){
         WebDriverManager.chromedriver().setup();
@@ -35,9 +38,18 @@ public class TestSuitePaquetesFalabella {
     @Before
     public void setUp(){
         //preparar el driver
-        driver = new ChromeDriver();
+        ChromeOptions options = new ChromeOptions();
+        options.setCapability("download_throughput", 2 * 1024);
+        options.setCapability("uploadThrougput", 2 * 1024);
+        options.setCapability("upload_throughput", 5);
+        driver = new ChromeDriver(options);
         driver.manage().deleteAllCookies();
         driver.manage().window().maximize();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+
+
+
+
     }
 
     @Test public void PTC01(){
@@ -51,6 +63,10 @@ public class TestSuitePaquetesFalabella {
         String destino = "VLN";
         //Abrir la pagina
         driver.get("https://www.viajesfalabella.cl/paquetes");
+        WebElement cookie = driver.findElement(localizadorBtnCookie);
+        if(cookie.isDisplayed()){
+            cookie.click();
+        }
         WebElement origin = driver.findElement(localizadorOrigin);
         origin.sendKeys(origen);
         WebDriverWait delay = new WebDriverWait(driver, Duration.ofSeconds(5));

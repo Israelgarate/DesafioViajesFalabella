@@ -26,6 +26,7 @@ public class TestSuiteVuelosFalabella {
     public By localizadorAumentarAdultos = By.xpath("(//a[@class = \"steppers-icon-right sbox-3-icon-plus\"])[11]");
     public By localizadorBtnAplicarPasajeros = By.xpath("(//a[text() =\"Aplicar\"])[3]");
     public By localizadorBtnBuscar = By.xpath("(//div [@class = \"sbox-button-container\"] )[1]");
+    public By localizadorBtnCookie = By.xpath("//a[@class=\"lgpd-banner--button eva-3-btn -white -md\"]");
     @BeforeClass
     public static void init(){
         WebDriverManager.chromedriver().setup();
@@ -49,6 +50,10 @@ public class TestSuiteVuelosFalabella {
         String destino = "BSB";
         //Abrir la pagina
         driver.get("https://www.viajesfalabella.cl/vuelos");
+        WebElement cookie = driver.findElement(localizadorBtnCookie);
+        if(cookie.isDisplayed()){
+            cookie.click();
+        }
         WebElement origin = driver.findElement(localizadorOrigin);
         origin.sendKeys(origen);
         WebDriverWait delay = new WebDriverWait(driver, Duration.ofSeconds(5));

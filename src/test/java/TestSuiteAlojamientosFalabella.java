@@ -27,6 +27,7 @@ public class TestSuiteAlojamientosFalabella {
     public By localizadorAumentarAdultos = By.xpath("(//a[@class = \"steppers-icon-right sbox-3-icon-plus\"])[1]");
     public By localizadorBtnAplicarPasajeros = By.xpath("//a[text() =\"Aplicar\"]");
     public By localizadorBtnBuscar = By.xpath("(//div [@class = \"sbox-button-container\"] )[1]");
+    public By localizadorBtnCookie = By.xpath("//a[@class=\"lgpd-banner--button eva-3-btn -white -md\"]");
     @BeforeClass
     public static void init(){
         WebDriverManager.chromedriver().setup();
@@ -49,6 +50,10 @@ public class TestSuiteAlojamientosFalabella {
         String destino = "VLN";
         //Abrir la pagina
         driver.get("https://www.viajesfalabella.cl/hoteles");
+        WebElement cookie = driver.findElement(localizadorBtnCookie);
+        if(cookie.isDisplayed()){
+            cookie.click();
+        }
         WebDriverWait delay = new WebDriverWait(driver, Duration.ofSeconds(10));
         WebElement destination = driver.findElement(localizadorDestination);
         destination.sendKeys(destino);
