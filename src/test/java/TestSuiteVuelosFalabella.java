@@ -1,4 +1,11 @@
 import io.github.bonigarcia.wdm.WebDriverManager;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openqa.selenium.Alert;
+
 import org.junit.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -29,11 +36,14 @@ public class TestSuiteVuelosFalabella {
     public By localizadorBtnAplicarPasajeros = By.xpath("(//a[text() =\"Aplicar\"])[3]");
     public By localizadorBtnBuscar = By.xpath("(//div [@class = \"sbox-button-container\"] )[1]");
     public By localizadorBtnCookie = By.xpath("//a[@class=\"lgpd-banner--button eva-3-btn -white -md\"]");
+    public By localizadorBtnComprarVuelo = By.xpath("(//em[@class=\"btn-text\"])[7]");
+    public By localizadorVolveraPaginaAnterior = By.xpath("//a[@class=\"breadcrumb-text eva-3-link\"]");
     public By localizadorClase = By.xpath("(//select[@class=\"select-tag\"])[43]");
     public By localizadorEquipajeMano = By.xpath("(//i[@class=\"checkbox-check eva-3-icon-checkmark filters-checkbox-left\"])[5]");
     public By localizadorUsd = By.xpath("(//i[@class=\"radio-circle\"])[2]");
     public By localizadorComprarPrimero = By.xpath("(//em[text() =\"Comprar\"])[1]");
     public By localizadorMetodosPago = By.xpath("//div[@class=\"eva-3-card -eva-3-shadow-line frame payment-method\"]/descendant::span[@class=\"payment-method-aligned\"]");
+
     @BeforeClass
     public static void init(){
         WebDriverManager.chromedriver().setup();
@@ -134,6 +144,124 @@ public class TestSuiteVuelosFalabella {
         WebElement btnBuscar = driver.findElement(localizadorBtnBuscar);
         btnBuscar.click();
     }
+    @Test
+    public void  VTC02(){
+
+        int mesViajeIda = 5;
+        int mesViajeVuelta = 3;
+        int diaViajeIda = 27;
+        int diaViajeVuelta = 22;
+        int añoViajeIda = 2022;
+        int añoViajeVuelta = 2023;
+        String origen = "SCL";
+        String destino = "BSB";
+
+        FluentWait<WebDriver> wait = new FluentWait<>(driver)
+                .withTimeout(Duration.ofSeconds(10))
+                .pollingEvery(Duration.ofMillis(1000))
+                .withMessage("Error de timeout BC(")
+                .ignoring(NoSuchElementException.class);
+
+
+        //Abrir la pagina
+        driver.get("https://www.viajesfalabella.cl/vuelos");
+        WebElement cookie = driver.findElement(localizadorBtnCookie);
+        if(cookie.isDisplayed()){
+            cookie.click();
+        }
+        WebElement origin = driver.findElement(localizadorOrigin);
+        origin.sendKeys(origen);
+        WebDriverWait delay = new WebDriverWait(driver, Duration.ofSeconds(5));
+        delay.until(ExpectedConditions.elementToBeClickable(localizadorAutocomplete));
+        WebElement autocomplete = driver.findElement(localizadorAutocomplete);
+        autocomplete.click();
+        WebElement destination = driver.findElement(localizadorDestination);
+        destination.sendKeys(destino);
+        delay.until(ExpectedConditions.elementToBeClickable(localizadorAutocomplete));
+        autocomplete.click();
+        WebElement dateStart = driver.findElement(localizadorDateStart);
+        dateStart.click();
+        WebElement btnNextDate = driver.findElement(localizadorBtnNextDate);
+        WebElement mesActual = driver.findElement(localizadorMonthActive);
+        String monthInit = mesActual.getAttribute("data-month").split("-")[1];
+        String yearInit = mesActual.getAttribute("data-month").split("-")[0];
+        if (Integer.parseInt(yearInit) == añoViajeIda){
+            for (int i = Integer.parseInt(monthInit); i <= mesViajeIda; i++) {
+                if (i == mesViajeIda){
+                    break;
+                }
+                btnNextDate.click();
+            }
+        }
+        else if (Integer.parseInt(yearInit) < añoViajeIda){
+            for (int i = Integer.parseInt(monthInit); i < 12 + mesViajeIda; i++) {
+                if (i == mesViajeIda){
+                    break;
+                }
+                btnNextDate.click();
+            }
+        }
+        String dayDataIda = mesViajeIda > 9 ? añoViajeIda + "-"+ mesViajeIda : añoViajeIda+"-"+"0"+mesViajeIda;
+        By localizadorDay = By.xpath("//div[contains(@data-month, \"" +  dayDataIda +"\")]/descendant::span[text()=\""+diaViajeIda+"\"]");
+        WebElement day = driver.findElement(localizadorDay);
+        day.click();
+        WebElement mesActualVuelta = driver.findElement(localizadorMonthActive);
+        String monthInitVuelta = mesActualVuelta.getAttribute("data-month").split("-")[1];
+        String yearInitVuelta = mesActualVuelta.getAttribute("data-month").split("-")[0];
+        if (mesViajeIda<=mesViajeVuelta || añoViajeIda<=añoViajeVuelta){
+            if (Integer.parseInt(yearInitVuelta) == añoViajeVuelta){
+                for (int i = Integer.parseInt(monthInitVuelta); i <= mesViajeVuelta  ; i++) {
+                    if (i == mesViajeVuelta){
+                        break;
+                    }
+                    btnNextDate.click();
+                }
+            }
+            else if (Integer.parseInt(yearInitVuelta) < añoViajeVuelta){
+                for (int i = Integer.parseInt(monthInitVuelta); i < 12 + mesViajeVuelta; i++) {
+                    if (i == mesViajeVuelta){
+                        break;
+                    }
+                    btnNextDate.click();
+                }
+            }
+        }
+        String dayDataVuelta = mesViajeVuelta > 9 ? añoViajeVuelta + "-"+ mesViajeVuelta : añoViajeVuelta+"-"+"0"+mesViajeVuelta;
+        By localizadorDayR = By.xpath("//div[contains(@data-month, \"" +  dayDataVuelta +"\")]/descendant::span[text()=\""+diaViajeVuelta+"\"]");
+        WebElement dayR = driver.findElement(localizadorDayR);
+        dayR.click();
+        WebElement aplicar = driver.findElement(localizadorBtnAplicarDate);
+        aplicar.click();
+        WebElement btnBuscar = driver.findElement(localizadorBtnBuscar);
+        btnBuscar.click();
+        try {
+            WebElement comprar = driver.findElement(localizadorComprarPrimero);
+            wait.until(ExpectedConditions.elementToBeClickable(comprar));
+            comprar.click();
+        }
+        catch(org.openqa.selenium.StaleElementReferenceException ex)
+        {
+            WebElement comprar = driver.findElement(localizadorComprarPrimero);
+            wait.until(ExpectedConditions.elementToBeClickable(comprar));
+            comprar.click();
+        }
+        WebElement volverPaginaAnterior = driver.findElement(localizadorVolveraPaginaAnterior);
+        volverPaginaAnterior.click();
+        Alert jsAlert = driver.switchTo().alert();
+        String textoPopUp = jsAlert.getText();
+        if(jsAlert.getText().equals("Es posible que los cambios no se guarden.")) {
+            jsAlert.accept();
+
+        }
+
+
+
+
+    }
+
+
+
+
 
     @Test public void VTC05()  {
         int mesViajeIda = 7;
