@@ -231,13 +231,151 @@ public class TestSuiteVuelosFalabella {
             WebElement edad = driver.findElement(By.xpath("(//select[@class=\"select-tag\"])[" + (35+i) + "]"));
             Select manejoEdad = new Select (edad);
             if (i == 1){
-                manejoEdad.selectByIndex(7);
+                manejoEdad.selectByValue("6");
             }
             if (i == 2){
-                manejoEdad.selectByIndex(9);
+                manejoEdad.selectByValue("8");
             }
             if (i == 3){
-                manejoEdad.selectByIndex(18);
+                manejoEdad.selectByValue("17");
+            }
+
+        }
+        WebElement clase = driver.findElement(localizadorClase);
+        Select manejoClase = new Select (clase);
+        manejoClase.selectByValue("C");
+        WebElement aplicarPasajeros = driver.findElement(localizadorBtnAplicarPasajeros);
+        aplicarPasajeros.click();
+        WebElement btnBuscar = driver.findElement(localizadorBtnBuscar);
+        btnBuscar.click();
+        WebElement equipajeMano = driver.findElement(localizadorEquipajeMano);
+        wait.until(ExpectedConditions.elementToBeClickable(equipajeMano));
+        equipajeMano.click();
+        try {
+            WebElement usd = driver.findElement(localizadorUsd);
+            wait.until(ExpectedConditions.elementToBeClickable(usd));
+            usd.click();
+        }
+        catch(org.openqa.selenium.StaleElementReferenceException ex)
+        {
+            WebElement usd = driver.findElement(localizadorUsd);
+            wait.until(ExpectedConditions.elementToBeClickable(usd));
+            usd.click();
+        }
+        WebElement comprarPrimero = driver.findElement(localizadorComprarPrimero);
+        comprarPrimero.click();
+        List<WebElement> pagos = driver.findElements(localizadorMetodosPago);
+        wait.until(ExpectedConditions.elementToBeClickable(pagos.get(0)));
+        if (pagos.size() == 1){
+            metodoPago = pagos.get(0).getText();
+        }
+        Assert.assertEquals(metodoPago, "Tarjeta de crédito");
+
+    }
+
+    @Test public void VTC06()  {
+        int mesViajeIda = 7;
+        int mesViajeVuelta = 7;
+        int diaViajeIda = 1;
+        int diaViajeVuelta = 7;
+        int añoViajeIda = 2022;
+        int añoViajeVuelta = 2022;
+        String origen = "SCL";
+        String destino = "VLN";
+        String metodoPago = "";
+        //Abrir la pagina
+
+        FluentWait<WebDriver> wait = new FluentWait<>(driver)
+                .withTimeout(Duration.ofSeconds(10))
+                .pollingEvery(Duration.ofMillis(1000))
+                .withMessage("Error de timeout BC(")
+                .ignoring(NoSuchElementException.class);
+
+        driver.get("https://www.viajesfalabella.cl/vuelos");
+        WebElement cookie = driver.findElement(localizadorBtnCookie);
+        if(cookie.isDisplayed()){
+            cookie.click();
+        }
+        WebElement origin = driver.findElement(localizadorOrigin);
+        origin.sendKeys(origen);
+        wait.until(ExpectedConditions.elementToBeClickable(localizadorAutocomplete));
+        WebElement autocomplete = driver.findElement(localizadorAutocomplete);
+        autocomplete.click();
+        WebElement destination = driver.findElement(localizadorDestination);
+        destination.sendKeys(destino);
+        wait.until(ExpectedConditions.elementToBeClickable(localizadorAutocomplete));
+        autocomplete.click();
+        WebElement dateStart = driver.findElement(localizadorDateStart);
+        dateStart.click();
+        WebElement btnNextDate = driver.findElement(localizadorBtnNextDate);
+        WebElement mesActual = driver.findElement(localizadorMonthActive);
+        String monthInit = mesActual.getAttribute("data-month").split("-")[1];
+        String yearInit = mesActual.getAttribute("data-month").split("-")[0];
+        if (Integer.parseInt(yearInit) == añoViajeIda){
+            for (int i = Integer.parseInt(monthInit); i <= mesViajeIda; i++) {
+                if (i == mesViajeIda){
+                    break;
+                }
+                btnNextDate.click();
+            }
+        }
+        else if (Integer.parseInt(yearInit) < añoViajeIda){
+            for (int i = Integer.parseInt(monthInit); i < 12 + mesViajeIda; i++) {
+                if (i == mesViajeIda){
+                    break;
+                }
+                btnNextDate.click();
+            }
+        }
+        String dayDataIda = mesViajeIda > 9 ? añoViajeIda + "-"+ mesViajeIda : añoViajeIda+"-"+"0"+mesViajeIda;
+        By localizadorDay = By.xpath("//div[contains(@data-month, \"" +  dayDataIda +"\")]/descendant::span[text()=\""+diaViajeIda+"\"]");
+        WebElement day = driver.findElement(localizadorDay);
+        day.click();
+        WebElement mesActualVuelta = driver.findElement(localizadorMonthActive);
+        String monthInitVuelta = mesActualVuelta.getAttribute("data-month").split("-")[1];
+        String yearInitVuelta = mesActualVuelta.getAttribute("data-month").split("-")[0];
+        if (mesViajeIda<=mesViajeVuelta || añoViajeIda<=añoViajeVuelta){
+            if (Integer.parseInt(yearInitVuelta) == añoViajeVuelta){
+                for (int i = Integer.parseInt(monthInitVuelta); i <= mesViajeVuelta  ; i++) {
+                    if (i == mesViajeVuelta){
+                        break;
+                    }
+                    btnNextDate.click();
+                }
+            }
+            else if (Integer.parseInt(yearInitVuelta) < añoViajeVuelta){
+                for (int i = Integer.parseInt(monthInitVuelta); i < 12 + mesViajeVuelta; i++) {
+                    if (i == mesViajeVuelta){
+                        break;
+                    }
+                    btnNextDate.click();
+                }
+            }
+        }
+        String dayDataVuelta = mesViajeVuelta > 9 ? añoViajeVuelta + "-"+ mesViajeVuelta : añoViajeVuelta+"-"+"0"+mesViajeVuelta;
+        By localizadorDayR = By.xpath("//div[contains(@data-month, \"" +  dayDataVuelta +"\")]/descendant::span[text()=\""+diaViajeVuelta+"\"]");
+        WebElement dayR = driver.findElement(localizadorDayR);
+        dayR.click();
+        WebElement aplicar = driver.findElement(localizadorBtnAplicarDate);
+        aplicar.click();
+        WebElement pasajeros = driver.findElement(localizadorPasajeros);
+        pasajeros.click();
+        WebElement adultos = driver.findElement(localizadorAumentarAdultos);
+        wait.until(ExpectedConditions.elementToBeClickable(localizadorAumentarAdultos));
+        adultos.click();
+        WebElement ninos = driver.findElement(localizadorAumentarNinos);
+        for (int i = 1; i < 4; i++) {
+            ninos.click();
+            WebElement edad = driver.findElement(By.xpath("(//select[@class=\"select-tag\"])[" + (35+i) + "]"));
+            Select manejoEdad = new Select (edad);
+            if (i == 1){
+                manejoEdad.selectByValue("0");
+            }
+            if (i == 2){
+                manejoEdad.selectByValue("11");
+            }
+            if (i == 3){
+                manejoEdad.selectByValue("17");
             }
 
         }
