@@ -1,13 +1,12 @@
 import io.github.bonigarcia.wdm.WebDriverManager;
-<<<<<<< HEAD
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.Alert;
-=======
+
 import org.junit.*;
->>>>>>> 2cfd9661f1bd19fc6e6679635b84266873f32f0a
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -37,16 +36,14 @@ public class TestSuiteVuelosFalabella {
     public By localizadorBtnAplicarPasajeros = By.xpath("(//a[text() =\"Aplicar\"])[3]");
     public By localizadorBtnBuscar = By.xpath("(//div [@class = \"sbox-button-container\"] )[1]");
     public By localizadorBtnCookie = By.xpath("//a[@class=\"lgpd-banner--button eva-3-btn -white -md\"]");
-<<<<<<< HEAD
     public By localizadorBtnComprarVuelo = By.xpath("(//em[@class=\"btn-text\"])[7]");
     public By localizadorVolveraPaginaAnterior = By.xpath("//a[@class=\"breadcrumb-text eva-3-link\"]");
-=======
     public By localizadorClase = By.xpath("(//select[@class=\"select-tag\"])[43]");
     public By localizadorEquipajeMano = By.xpath("(//i[@class=\"checkbox-check eva-3-icon-checkmark filters-checkbox-left\"])[5]");
     public By localizadorUsd = By.xpath("(//i[@class=\"radio-circle\"])[2]");
     public By localizadorComprarPrimero = By.xpath("(//em[text() =\"Comprar\"])[1]");
     public By localizadorMetodosPago = By.xpath("//div[@class=\"eva-3-card -eva-3-shadow-line frame payment-method\"]/descendant::span[@class=\"payment-method-aligned\"]");
->>>>>>> 2cfd9661f1bd19fc6e6679635b84266873f32f0a
+
     @BeforeClass
     public static void init(){
         WebDriverManager.chromedriver().setup();
@@ -149,6 +146,7 @@ public class TestSuiteVuelosFalabella {
     }
     @Test
     public void  VTC02(){
+
         int mesViajeIda = 5;
         int mesViajeVuelta = 3;
         int diaViajeIda = 27;
@@ -157,6 +155,14 @@ public class TestSuiteVuelosFalabella {
         int añoViajeVuelta = 2023;
         String origen = "SCL";
         String destino = "BSB";
+
+        FluentWait<WebDriver> wait = new FluentWait<>(driver)
+                .withTimeout(Duration.ofSeconds(10))
+                .pollingEvery(Duration.ofMillis(1000))
+                .withMessage("Error de timeout BC(")
+                .ignoring(NoSuchElementException.class);
+
+
         //Abrir la pagina
         driver.get("https://www.viajesfalabella.cl/vuelos");
         WebElement cookie = driver.findElement(localizadorBtnCookie);
@@ -228,13 +234,22 @@ public class TestSuiteVuelosFalabella {
         aplicar.click();
         WebElement btnBuscar = driver.findElement(localizadorBtnBuscar);
         btnBuscar.click();
-        WebElement btnComprarVuelo = driver.findElement(localizadorBtnComprarVuelo);
-        btnComprarVuelo.click();
+        try {
+            WebElement comprar = driver.findElement(localizadorComprarPrimero);
+            wait.until(ExpectedConditions.elementToBeClickable(comprar));
+            comprar.click();
+        }
+        catch(org.openqa.selenium.StaleElementReferenceException ex)
+        {
+            WebElement comprar = driver.findElement(localizadorComprarPrimero);
+            wait.until(ExpectedConditions.elementToBeClickable(comprar));
+            comprar.click();
+        }
         WebElement volverPaginaAnterior = driver.findElement(localizadorVolveraPaginaAnterior);
         volverPaginaAnterior.click();
         Alert jsAlert = driver.switchTo().alert();
         String textoPopUp = jsAlert.getText();
-        if(textoPopUp.contains("¿Quieres salir de este sitio web?")) {
+        if(jsAlert.getText().equals("Es posible que los cambios no se guarden.")) {
             jsAlert.accept();
 
         }
