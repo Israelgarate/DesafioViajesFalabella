@@ -13,18 +13,19 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
 
-public class TestSuiteVuelosFalabella {
+public class TestSuiteAlojamientosFalabella {
     public static WebDriver driver;
-    public By localizadorOrigin = By.xpath("//input[contains(@class, \"sbox-bind-reference-flight-roundtrip-origin-input\" )]");
-    public By localizadorDestination= By.xpath("//input[contains(@class, \"sbox-bind-reference-flight-roundtrip-destination-input\" )]");
-    public By localizadorDateStart = By.xpath("//input[contains(@class, \"sbox-bind-reference-flight-start-date-input\" )]");
-    public By localizadorAutocomplete = By.xpath("//li[@class=\"item -active\"]");
-    public By localizadorBtnNextDate = By.xpath("//div[@class = \"_dpmg2--controls-next\"]/descendant::i");
+    public By localizadorDestination= By.xpath("//input[contains(@class, \"sbox-destination\")]");
+    public By localizadorDateStart = By.xpath("//input[contains(@class, \"sbox-checkin-date\" )]");
+    public By localizadorDateEnd = By.xpath("//input[contains(@class, \"sbox-checkout-date\" )]");
+    public By localizadorAutocomplete = By.xpath("(//span[@class=\"item-text\"])[1]");
+    public By localizadorBtnNextDate = By.xpath("(//div[@class = \"_dpmg2--controls-next\"]/descendant::i)");
     public By localizadorMonthActive = By.xpath("//div[contains(@class, \"_dpmg2--month-active\")]");
+    public By localizadorMonthActiveRange = By.xpath("//div[contains(@class, \"_dpmg2--has-start-range\")]");
     public By localizadorBtnAplicarDate = By.xpath("//button[@class=\"_dpmg2--desktopFooter-button _dpmg2--desktopFooter-button-apply sbox-3-btn -lg -primary\"]");
-    public By localizadorPasajeros = By.xpath("(//div[contains(@class, \"sbox-passengers-container\")])[1]");
-    public By localizadorAumentarAdultos = By.xpath("(//a[@class = \"steppers-icon-right sbox-3-icon-plus\"])[11]");
-    public By localizadorBtnAplicarPasajeros = By.xpath("(//a[text() =\"Aplicar\"])[3]");
+    public By localizadorPasajeros = By.xpath("(//div[contains(@class, \"sbox-guests-container\")])[1]");
+    public By localizadorAumentarAdultos = By.xpath("(//a[@class = \"steppers-icon-right sbox-3-icon-plus\"])[1]");
+    public By localizadorBtnAplicarPasajeros = By.xpath("//a[text() =\"Aplicar\"]");
     public By localizadorBtnBuscar = By.xpath("(//div [@class = \"sbox-button-container\"] )[1]");
     @BeforeClass
     public static void init(){
@@ -38,26 +39,21 @@ public class TestSuiteVuelosFalabella {
         driver.manage().window().maximize();
     }
 
-    @Test public void VTC01(){
+    @Test public void ATC01(){
         int mesViajeIda = 5;
         int mesViajeVuelta = 5;
         int diaViajeIda = 1;
-        int diaViajeVuelta = 5;
+        int diaViajeVuelta = 20;
         int añoViajeIda = 2022;
         int añoViajeVuelta = 2022;
-        String origen = "SCL";
-        String destino = "BSB";
+        String destino = "VLN";
         //Abrir la pagina
-        driver.get("https://www.viajesfalabella.cl/vuelos");
-        WebElement origin = driver.findElement(localizadorOrigin);
-        origin.sendKeys(origen);
-        WebDriverWait delay = new WebDriverWait(driver, Duration.ofSeconds(5));
-        delay.until(ExpectedConditions.elementToBeClickable(localizadorAutocomplete));
-        WebElement autocomplete = driver.findElement(localizadorAutocomplete);
-        autocomplete.click();
+        driver.get("https://www.viajesfalabella.cl/hoteles");
+        WebDriverWait delay = new WebDriverWait(driver, Duration.ofSeconds(10));
         WebElement destination = driver.findElement(localizadorDestination);
         destination.sendKeys(destino);
         delay.until(ExpectedConditions.elementToBeClickable(localizadorAutocomplete));
+        WebElement autocomplete = driver.findElement(localizadorAutocomplete);
         autocomplete.click();
         WebElement dateStart = driver.findElement(localizadorDateStart);
         dateStart.click();
@@ -85,7 +81,9 @@ public class TestSuiteVuelosFalabella {
         By localizadorDay = By.xpath("//div[contains(@data-month, \"" +  dayDataIda +"\")]/descendant::span[text()=\""+diaViajeIda+"\"]");
         WebElement day = driver.findElement(localizadorDay);
         day.click();
-        WebElement mesActualVuelta = driver.findElement(localizadorMonthActive);
+        WebElement dateEnd = driver.findElement(localizadorDateEnd);
+        dateEnd.click();
+        WebElement mesActualVuelta = driver.findElement(localizadorMonthActiveRange);
         String monthInitVuelta = mesActualVuelta.getAttribute("data-month").split("-")[1];
         String yearInitVuelta = mesActualVuelta.getAttribute("data-month").split("-")[0];
         if (mesViajeIda<=mesViajeVuelta || añoViajeIda<=añoViajeVuelta){
@@ -112,12 +110,6 @@ public class TestSuiteVuelosFalabella {
         dayR.click();
         WebElement aplicar = driver.findElement(localizadorBtnAplicarDate);
         aplicar.click();
-        WebElement pasajeros = driver.findElement(localizadorPasajeros);
-        pasajeros.click();
-        WebElement adultos = driver.findElement(localizadorAumentarAdultos);
-        adultos.click();
-        WebElement aplicarPasajeros = driver.findElement(localizadorBtnAplicarPasajeros);
-        aplicarPasajeros.click();
         WebElement btnBuscar = driver.findElement(localizadorBtnBuscar);
         btnBuscar.click();
     }
@@ -126,9 +118,9 @@ public class TestSuiteVuelosFalabella {
 
     @After
     public void close(){
-       if(driver != null){
+      /* if(driver != null){
             driver.close();
-        }
+        }*/
     }
 
 
