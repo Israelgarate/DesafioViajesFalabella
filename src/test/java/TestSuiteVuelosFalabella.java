@@ -36,8 +36,7 @@ public class TestSuiteVuelosFalabella {
     public By localizadorBtnAplicarPasajeros = By.xpath("(//a[text() =\"Aplicar\"])[3]");
     public By localizadorBtnBuscar = By.xpath("(//div [@class = \"sbox-button-container\"] )[1]");
     public By localizadorBtnCookie = By.xpath("//a[@class=\"lgpd-banner--button eva-3-btn -white -md\"]");
-    public By localizadorBtnComprarVuelo = By.xpath("(//em[@class=\"btn-text\"])[7]");
-    public By localizadorVolveraPaginaAnterior = By.xpath("//a[@class=\"breadcrumb-text eva-3-link\"]");
+    public By localizadorVolverAPaginaAnterior = By.xpath("//a[@class=\"breadcrumb-text eva-3-link\"]");
     public By localizadorClase = By.xpath("(//select[@class=\"select-tag\"])[43]");
     public By localizadorEquipajeMano = By.xpath("(//i[@class=\"checkbox-check eva-3-icon-checkmark filters-checkbox-left\"])[5]");
     public By localizadorUsd = By.xpath("(//i[@class=\"radio-circle\"])[2]");
@@ -144,8 +143,8 @@ public class TestSuiteVuelosFalabella {
         WebElement btnBuscar = driver.findElement(localizadorBtnBuscar);
         btnBuscar.click();
     }
-    @Test
-    public void  VTC02(){
+
+    @Test public void  VTC02(){
 
         int mesViajeIda = 5;
         int mesViajeVuelta = 3;
@@ -245,23 +244,13 @@ public class TestSuiteVuelosFalabella {
             wait.until(ExpectedConditions.elementToBeClickable(comprar));
             comprar.click();
         }
-        WebElement volverPaginaAnterior = driver.findElement(localizadorVolveraPaginaAnterior);
+        WebElement volverPaginaAnterior = driver.findElement(localizadorVolverAPaginaAnterior);
+        wait.until(ExpectedConditions.elementToBeClickable(volverPaginaAnterior));
         volverPaginaAnterior.click();
-        Alert jsAlert = driver.switchTo().alert();
-        String textoPopUp = jsAlert.getText();
-        if(jsAlert.getText().equals("Es posible que los cambios no se guarden.")) {
-            jsAlert.accept();
-
-        }
-
-
+        driver.switchTo().alert().accept();
 
 
     }
-
-
-
-
 
     @Test public void VTC05()  {
         int mesViajeIda = 7;
