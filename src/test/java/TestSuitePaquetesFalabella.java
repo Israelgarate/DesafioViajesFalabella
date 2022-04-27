@@ -61,6 +61,7 @@ public class TestSuitePaquetesFalabella {
         destination.sendKeys(destino);
         delay.until(ExpectedConditions.elementToBeClickable(localizadorAutocomplete));
         autocomplete.click();
+        delay.until(ExpectedConditions.elementToBeClickable(localizadorDateStart));
         WebElement dateStart = driver.findElement(localizadorDateStart);
         dateStart.click();
         WebElement btnNextDate = driver.findElement(localizadorBtnNextDate);
@@ -87,6 +88,7 @@ public class TestSuitePaquetesFalabella {
         By localizadorDay = By.xpath("(//div[contains(@data-month, \"" +  dayDataIda +"\")]/descendant::span[text()=\""+diaViajeIda+"\"])[3]");
         WebElement day = driver.findElement(localizadorDay);
         day.click();
+        delay.until(ExpectedConditions.elementToBeClickable(localizadorDateEnd));
         WebElement dateEnd = driver.findElement(localizadorDateEnd);
         dateEnd.click();
         WebElement mesActualVuelta = driver.findElement(localizadorMonthActiveRange);
