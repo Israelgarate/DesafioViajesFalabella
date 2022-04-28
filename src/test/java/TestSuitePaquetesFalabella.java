@@ -142,7 +142,7 @@ public class TestSuitePaquetesFalabella {
         btnBuscar.click();
     }
 
-    @Test public void PTC06() throws InterruptedException {
+    @Test public void PTC06()  {
         int mesViajeIda = 6;
         int mesViajeVuelta = 6;
         int diaViajeIda = 1;
