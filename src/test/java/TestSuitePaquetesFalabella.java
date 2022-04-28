@@ -41,19 +41,15 @@ public class TestSuitePaquetesFalabella {
     public By localizadorCuatroEstrellas = By.xpath("(//i[@class=\"checkbox-check eva-3-icon-checkmark filters-checkbox-left\"])[4]");
     @BeforeClass
     public static void init(){
-        WebDriverManager.firefoxdriver().setup();
+        WebDriverManager.chromedriver().setup();
     }
     @Before
     public void setUp(){
         //preparar el driver
-        driver = new FirefoxDriver();
+        driver = new ChromeDriver();
         driver.manage().deleteAllCookies();
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
-
-
-
-
     }
 
     @Test public void PTC01(){
