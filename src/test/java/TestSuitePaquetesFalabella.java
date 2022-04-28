@@ -1,23 +1,13 @@
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.chromium.ChromiumDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Set;
+
 
 
 public class TestSuitePaquetesFalabella {
@@ -44,7 +34,15 @@ public class TestSuitePaquetesFalabella {
     public By localizadorOtroDestino = By.xpath("//input[@class=\"input-tag sbox-main-focus sbox-hotel-another-city sbox-primary undefined attr\"]");
     public By localizadorCuatroEstrellas = By.xpath("(//i[@class=\"checkbox-check eva-3-icon-checkmark filters-checkbox-left\"])[4]");
     public By localizadorHotelCosta = By.xpath("(//button[@class=\"eva-3-btn -md -primary -eva-3-fwidth\"])[2]");
-    public By  localizadorSuiteEs = By.xpath("//a[@class=\"shifu-3-button-circle OFFERS paint-circle \"]");
+    public By localizadorSuiteEs = By.xpath("(//i[@class=\"radio-circle\"])[4]");
+    public By localizadorSiguienteHotel = By.xpath("(//button[@class=\"eva-3-btn -md -primary -eva-3-fwidth\"])[1]");
+    public By localizadorEquipajeBodega = By.xpath("(//i[@class=\"checkbox-check eva-3-icon-checkmark filters-checkbox-left\"])[3]");
+    public By localizadorSiguienteVuelo = By.xpath("(//buy-button)[1]");
+    public By localizadorBtnNextAuto = By.xpath("(//div [@class=\"eva-3-nav-slider custom-nav-slider-styles -right -md -eva-3-shadow-line-hover -white arrow-right outside-position-navigation\"])[2]");
+    public By localizadorAgregarAuto = By.xpath("(//button [@class=\"eva-3-btn -md -primary -eva-3-ml-sm\"])[14]");
+    public By localizadorAgregarAutoCompacto = By.xpath("//a[@class=\"eva-3-btn-ghost -lg -primary\"]");
+    public By localizadorNextCompra = By.xpath("//button[@class=\"eva-3-btn -lg pricebox-sticky-button -secondary\"]");
+    public By localizadorApurate = By.xpath("(//span [@class=\"eva-3-h5 message-title\"])[1]");
     @BeforeClass
     public static void init(){
         WebDriverManager.chromedriver().setup();
@@ -274,19 +272,58 @@ public class TestSuitePaquetesFalabella {
         wait.until(ExpectedConditions.numberOfWindowsToBe(2));
         driver.switchTo().window(driver.getWindowHandles().toArray()[1].toString());
         // ir a otra ventana
-
-
+        WebElement suiteEs = driver.findElement(localizadorSuiteEs);
+        wait.until(ExpectedConditions.elementToBeClickable(suiteEs));
+        suiteEs.click();
+        WebElement btnReservar = driver.findElement(localizadorSiguienteHotel);
+        wait.until(ExpectedConditions.elementToBeClickable(btnReservar));
+        btnReservar.click();
+        WebElement equipaje = driver.findElement(localizadorEquipajeBodega);
+        wait.until(ExpectedConditions.elementToBeClickable(equipaje));
+        equipaje.click();
         try {
-            WebElement suiteEs = driver.findElement(localizadorSuiteEs);
-            wait.until(ExpectedConditions.elementToBeClickable(suiteEs));
-            suiteEs.click();
+            WebElement btnVuelo = driver.findElement(localizadorSiguienteVuelo);
+            wait.until(ExpectedConditions.elementToBeClickable(btnVuelo));
+            btnVuelo.click();
         }
-        catch(org.openqa.selenium.StaleElementReferenceException ex)
+        catch(org.openqa.selenium.ElementClickInterceptedException ex)
         {
-            WebElement suiteEs = driver.findElement(localizadorSuiteEs);
-            wait.until(ExpectedConditions.elementToBeClickable(suiteEs));
-            suiteEs.click();
+            WebElement btnVuelo = driver.findElement(localizadorSiguienteVuelo);
+            wait.until(ExpectedConditions.elementToBeClickable(btnVuelo));
+            btnVuelo.click();
         }
+        try {
+            driver.findElement(By.cssSelector("Body")).sendKeys(Keys.END);
+            wait.until(ExpectedConditions.visibilityOfElementLocated(localizadorBtnNextAuto));
+            WebElement btnNextAuto = driver.findElement(localizadorBtnNextAuto);
+            JavascriptExecutor jse = (JavascriptExecutor)driver;
+            jse.executeScript("arguments[0].click();", btnNextAuto);
+            WebElement btnAgregarAuto = driver.findElement(localizadorAgregarAuto);
+            jse.executeScript("arguments[0].click();", btnAgregarAuto);
+            WebElement btnAgregarAutoCom = driver.findElement(localizadorAgregarAutoCompacto);
+            jse.executeScript("arguments[0].click();", btnAgregarAutoCom);
+            WebElement btnNextComprar = driver.findElement(localizadorNextCompra);
+            jse.executeScript("arguments[0].click();", btnNextComprar);
+
+        }
+        catch(org.openqa.selenium.ElementClickInterceptedException ex)
+        {
+            driver.findElement(By.cssSelector("Body")).sendKeys(Keys.END);
+            wait.until(ExpectedConditions.visibilityOfElementLocated(localizadorBtnNextAuto));
+            WebElement btnNextAuto = driver.findElement(localizadorBtnNextAuto);
+            JavascriptExecutor jse = (JavascriptExecutor)driver;
+            jse.executeScript("arguments[0].click();", btnNextAuto);
+            WebElement btnAgregarAuto = driver.findElement(localizadorAgregarAuto);
+            jse.executeScript("arguments[0].click();", btnAgregarAuto);
+            WebElement btnAgregarAutoCom = driver.findElement(localizadorAgregarAutoCompacto);
+            jse.executeScript("arguments[0].click();", btnAgregarAutoCom);
+            WebElement btnNextComprar = driver.findElement(localizadorNextCompra);
+            jse.executeScript("arguments[0].click();", btnNextComprar);
+        }
+        WebElement apurate = driver.findElement(localizadorApurate);
+        wait.until(ExpectedConditions.elementToBeClickable(apurate));
+        Assert.assertEquals(apurate.getText(), "¡Apúrate!");
+
     }
 
     @After
