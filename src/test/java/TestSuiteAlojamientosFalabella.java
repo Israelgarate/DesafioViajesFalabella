@@ -121,6 +121,7 @@ public class TestSuiteAlojamientosFalabella {
         WebElement btnBuscar = driver.findElement(localizadorBtnBuscar);
         btnBuscar.click();
     }
+
     @Test public void ATC02(){
         int mesViajeIda = 6;
         int mesViajeVuelta = 6;
@@ -214,6 +215,8 @@ public class TestSuiteAlojamientosFalabella {
 
 
     }
+
+
 
 
 
