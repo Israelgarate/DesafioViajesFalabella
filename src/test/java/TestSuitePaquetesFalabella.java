@@ -47,6 +47,8 @@ public class TestSuitePaquetesFalabella {
     public By localizadorPaquetesCaribe = By.xpath("(//optional-link)[2]");
     public By localizadorPaquetesCancun = By.xpath("(//img[@class=\"offer-card-image-main\"])[4]");
     public By localizadorPaqueteACancun = By.xpath("(//div[@class=\"date-container__price col -sm-12\"])[1]");
+    public By localizadorPaquetesAruba = By.xpath("(//img[@class=\"offer-card-image-main\"])[2]");
+    public By localizadorPaqueteAAruba = By.xpath("(//div[@class=\"date-container__price col -sm-12\"])[1]");
     public By localizadorVerDetalle = By.xpath("(//a[@class=\"eva-3-btn -md -primary \"])[2]");
     public By localizadorCambiarALojamiento = By.xpath("(//a[@class=\"eva-3-link ng-star-inserted\"])[2]");
     public By localizadorDetalleAlojamiento = By.xpath("(//a[@class=\"eva-3-btn-ghost -md -eva-3-fwidth\"])[3]");
@@ -59,10 +61,17 @@ public class TestSuitePaquetesFalabella {
     public By localizadorNextImage = By.xpath("(//i[@class=\"eva-3-icon-arrow-down gallery-arrow arrow-right\"])");
     public By localizadorCerrarGaleria = By.xpath("(//i[@class=\"eva-3-icon-close gallery-close\"])");
     public By localizadorVuelo = By.xpath("(//em[@class=\"btn-text ng-star-inserted\"])[1]");
-    public By localizadorEquipajeBodega2 = By.xpath("(//i[@class=\"checkbox-check eva-3-icon-checkmark filters-checkbox-left\"])[6]");
+    public By localizadorEquipajeBodega2 = By.xpath("//input[@data-sfa-id=\"Equipaje en bodega\"]//following-sibling::i");
     public By localizadorNuevoVuelo = By.xpath("(//a[@class=\"-md eva-3-btn-ghost\"])[1]");
     public By localizadorSiguienteComprar = By.xpath("(//button[@class=\"eva-3-btn -lg pricebox-sticky-button -secondary\"])");
     public By localizadorNextPaquete =By.xpath("//i[@class=\"nav-slider-icon eva-3-icon-arrow-right\"]");
+    public By localizadorFiltroDesayuno = By.xpath("(//span[text()=\" Desayuno continental \"])[1]");
+    public By localizadorAgregarTranslado = By.xpath("(//button[@class=\"eva-3-btn -md -primary -eva-3-ml-sm\"])[2]");
+    public By localizadorAceptarTranslado = By.xpath("(//a[@class=\"eva-3-btn-ghost -lg -primary\"])[1]");
+    public By localizadorAceptarAuto = By.xpath("(//a[@class=\"eva-3-btn-ghost -lg -primary\"])[2]");
+    public By localizadorActividad = By.xpath("(//button[@class=\"eva-3-btn -eva-3-fwidth -md -primary\"])[2]");
+    public By localizadorAuto = By.xpath("(//button[@class=\"eva-3-btn -md -primary -eva-3-ml-sm\"])[14]");
+
 
 
     @BeforeClass
@@ -164,6 +173,140 @@ public class TestSuitePaquetesFalabella {
         btnBuscar.click();
     }
 
+    @Test public void PTC04() {
+
+        FluentWait<WebDriver> wait = new FluentWait<>(driver)
+                .withTimeout(Duration.ofSeconds(20))
+                .pollingEvery(Duration.ofMillis(1000))
+                .withMessage("Error de timeout BC(")
+                .ignoring(NoSuchElementException.class);
+
+        //Abrir la pagina
+        driver.get("https://www.viajesfalabella.cl/paquetes");
+        WebElement cookie = driver.findElement(localizadorBtnCookie);
+        if(cookie.isDisplayed()){
+            cookie.click();
+        }
+
+        try {
+            WebElement caribe = driver.findElement(localizadorPaquetesCaribe);
+            wait.until(ExpectedConditions.elementToBeClickable(caribe));
+            caribe.click();
+            WebElement paqueteAruba = driver.findElement(localizadorPaquetesAruba);
+            wait.until(ExpectedConditions.elementToBeClickable(paqueteAruba));
+            paqueteAruba.click();
+            WebElement btnBuscarPaquete = driver.findElement(localizadorPaqueteAAruba);
+            wait.until(ExpectedConditions.elementToBeClickable(btnBuscarPaquete));
+            btnBuscarPaquete.click();
+        }  catch (org.openqa.selenium.StaleElementReferenceException ex) {
+            WebElement caribe = driver.findElement(localizadorPaquetesCaribe);
+            wait.until(ExpectedConditions.elementToBeClickable(caribe));
+            caribe.click();
+            WebElement paqueteAruba = driver.findElement(localizadorPaquetesAruba);
+            wait.until(ExpectedConditions.elementToBeClickable(paqueteAruba));
+            paqueteAruba.click();
+            WebElement btnBuscarPaquete = driver.findElement(localizadorPaqueteAAruba);
+            wait.until(ExpectedConditions.elementToBeClickable(btnBuscarPaquete));
+            btnBuscarPaquete.click();
+        }
+        // ir a otra ventana
+        wait.until(ExpectedConditions.numberOfWindowsToBe(2));
+        driver.switchTo().window(driver.getWindowHandles().toArray()[1].toString());
+        // ir a otra ventana
+        JavascriptExecutor jse = (JavascriptExecutor)driver;
+        /*WebElement nextPage = driver.findElement(localizadorNextPaquete);
+        nextPage.click();*/
+        WebElement filtro = driver.findElement(localizadorFiltroDesayuno);
+        wait.until(ExpectedConditions.elementToBeClickable(filtro));
+        filtro.click();
+        WebElement habitacion = driver.findElement(localizadorSuiteJunior);
+        wait.until(ExpectedConditions.elementToBeClickable(habitacion));
+        habitacion.click();
+        WebElement aceptarHabitacion = driver.findElement(localizadorAceptarSuite);
+        wait.until(ExpectedConditions.elementToBeClickable(aceptarHabitacion));
+        aceptarHabitacion.click();
+        try {
+            WebElement equipajeBodega = driver.findElement(localizadorEquipajeBodega2);
+            wait.until(ExpectedConditions.elementToBeClickable(equipajeBodega));
+            equipajeBodega.click();
+        }  catch (org.openqa.selenium.WebDriverException ex) {
+            WebElement equipajeBodega = driver.findElement(localizadorEquipajeBodega2);
+            wait.until(ExpectedConditions.elementToBeClickable(equipajeBodega));
+            equipajeBodega.click();
+        }
+        try {
+            WebElement nuevoVuelo = driver.findElement(localizadorNuevoVuelo);
+            wait.until(ExpectedConditions.elementToBeClickable(nuevoVuelo));
+            jse.executeScript("arguments[0].click();", nuevoVuelo);
+        }  catch (org.openqa.selenium.StaleElementReferenceException ex) {
+            WebElement nuevoVuelo = driver.findElement(localizadorNuevoVuelo);
+            wait.until(ExpectedConditions.elementToBeClickable(nuevoVuelo));
+            jse.executeScript("arguments[0].click();", nuevoVuelo);
+        }
+        try {
+            WebElement agregarTranslado = driver.findElement(localizadorAgregarTranslado);
+            wait.until(ExpectedConditions.elementToBeClickable(agregarTranslado));
+            jse.executeScript("arguments[0].click();", agregarTranslado);
+        }  catch (org.openqa.selenium.StaleElementReferenceException ex) {
+            WebElement agregarTranslado = driver.findElement(localizadorAgregarTranslado);
+            wait.until(ExpectedConditions.elementToBeClickable(agregarTranslado));
+            jse.executeScript("arguments[0].click();", agregarTranslado);
+        }
+        try {
+            WebElement aceptarTranslado = driver.findElement(localizadorAceptarTranslado);
+            wait.until(ExpectedConditions.elementToBeClickable(aceptarTranslado));
+            jse.executeScript("arguments[0].click();", aceptarTranslado);
+        }  catch (org.openqa.selenium.StaleElementReferenceException ex) {
+            WebElement aceptarTranslado = driver.findElement(localizadorAceptarTranslado);
+            wait.until(ExpectedConditions.elementToBeClickable(aceptarTranslado));
+            jse.executeScript("arguments[0].click();", aceptarTranslado);
+        }
+        try {
+            WebElement agregarActividad1 = driver.findElement(localizadorActividad);
+            wait.until(ExpectedConditions.elementToBeClickable(agregarActividad1));
+            jse.executeScript("arguments[0].click();", agregarActividad1);
+        }  catch (org.openqa.selenium.StaleElementReferenceException ex) {
+            WebElement agregarActividad1 = driver.findElement(localizadorActividad);
+            wait.until(ExpectedConditions.elementToBeClickable(agregarActividad1));
+            jse.executeScript("arguments[0].click();", agregarActividad1);
+        }
+        try {
+            WebElement agregarAuto = driver.findElement(localizadorAuto);
+            wait.until(ExpectedConditions.elementToBeClickable(agregarAuto));
+            jse.executeScript("arguments[0].click();", agregarAuto);
+        }  catch (org.openqa.selenium.StaleElementReferenceException ex) {
+            WebElement agregarAuto = driver.findElement(localizadorAuto);
+            wait.until(ExpectedConditions.elementToBeClickable(agregarAuto));
+            jse.executeScript("arguments[0].click();", agregarAuto);
+        }
+        try {
+            WebElement aceptarAuto = driver.findElement(localizadorAceptarAuto);
+            wait.until(ExpectedConditions.elementToBeClickable(aceptarAuto));
+            jse.executeScript("arguments[0].click();", aceptarAuto);
+        }  catch (org.openqa.selenium.StaleElementReferenceException ex) {
+            WebElement aceptarAuto = driver.findElement(localizadorAceptarAuto);
+            wait.until(ExpectedConditions.elementToBeClickable(aceptarAuto));
+            jse.executeScript("arguments[0].click();", aceptarAuto);
+        }
+        try {
+            WebElement comprar = driver.findElement(localizadorSiguienteComprar);
+            wait.until(ExpectedConditions.elementToBeClickable(comprar));
+            comprar.click();
+        }  catch (org.openqa.selenium.InvalidSelectorException ex) {
+            WebElement comprar = driver.findElement(localizadorSiguienteComprar);
+            wait.until(ExpectedConditions.elementToBeClickable(comprar));
+            comprar.click();
+        }
+
+
+
+
+        WebElement apurate = driver.findElement(localizadorApurate);
+        wait.until(ExpectedConditions.elementToBeClickable(apurate));
+        Assert.assertEquals(apurate.getText(), "¡Felicitaciones! Seleccionaste la habitación más económica del Coconut inn. ¡No te la pierdas! Confirma ahora tu reserva");
+
+    }
+
     @Test public void PTC05() {
 
         FluentWait<WebDriver> wait = new FluentWait<>(driver)
@@ -183,9 +326,9 @@ public class TestSuitePaquetesFalabella {
             WebElement caribe = driver.findElement(localizadorPaquetesCaribe);
             wait.until(ExpectedConditions.elementToBeClickable(caribe));
             caribe.click();
-            WebElement puntaCana = driver.findElement(localizadorPaquetesCancun);
-            wait.until(ExpectedConditions.elementToBeClickable(puntaCana));
-            puntaCana.click();
+            WebElement paqueteCancun = driver.findElement(localizadorPaquetesCancun);
+            wait.until(ExpectedConditions.elementToBeClickable(paqueteCancun));
+            paqueteCancun.click();
             WebElement btnBuscarPaquete = driver.findElement(localizadorPaqueteACancun);
             wait.until(ExpectedConditions.elementToBeClickable(btnBuscarPaquete));
             btnBuscarPaquete.click();
