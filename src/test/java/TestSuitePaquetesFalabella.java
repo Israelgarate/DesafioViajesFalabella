@@ -228,7 +228,6 @@ public class TestSuitePaquetesFalabella {
         // ir a otra ventana
         wait.until(ExpectedConditions.numberOfWindowsToBe(2));
         driver.switchTo().window(driver.getWindowHandles().toArray()[1].toString());
-       String hola = driver.getTitle();
         // ir a otra ventana
         try {
             WebElement selecionarHotel = driver.findElement(localizadorHotelChile);
