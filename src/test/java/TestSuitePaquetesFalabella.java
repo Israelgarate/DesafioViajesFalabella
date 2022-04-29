@@ -75,7 +75,12 @@ public class TestSuitePaquetesFalabella {
     public By localizadorIrAVuelo = By.xpath("(//div[@class=\"wizard-step -full-width\"])[2]");
     public By localizadorEquipajeMano = By.xpath("(//i[@class=\"checkbox-check eva-3-icon-checkmark filters-checkbox-left\"])[5]");
     public By localizadorSeleccionarVuelo = By.xpath("(//a[@class=\"-md eva-3-btn-ghost\"])[1]");
-
+    public By localizadorViajesPorChile = By.xpath("//a[@href=\"https://www.viajesfalabella.cl/ofertas-viajes/viajes-chile\"]");
+    public By localizadorVerOfertas = By.xpath("(//span[@class=\"-md -default eva-3-btn-ghost\"])[1]");
+    public By localizadorPaquetePuertoVaras = By.xpath("(//div[text()=\"Paquetes a Puerto Varas\"])");
+    public By localizadorPaquetesAPuertoVaras = By.xpath("(//div[@class=\"date-container__price col -sm-12\"])[1]");
+    public By localizadorHotelChile = By.xpath("(//Button[@class=\"eva-3-btn -md -primary -eva-3-fwidth\"])[1]");
+    public By localizadorVueloChile = By.xpath("(//a[@class=\"-md eva-3-btn -primary\"])[1]");
 
 
 
@@ -176,6 +181,90 @@ public class TestSuitePaquetesFalabella {
         aplicar.click();
         WebElement btnBuscar = driver.findElement(localizadorBtnBuscar);
         btnBuscar.click();
+    }
+
+    @Test public void PTC02() {
+
+        FluentWait<WebDriver> wait = new FluentWait<>(driver)
+                .withTimeout(Duration.ofSeconds(20))
+                .pollingEvery(Duration.ofMillis(1000))
+                .withMessage("Error de timeout BC(")
+                .ignoring(NoSuchElementException.class);
+
+        //Abrir la pagina
+        driver.get("https://www.viajesfalabella.cl/paquetes");
+        WebElement cookie = driver.findElement(localizadorBtnCookie);
+        if(cookie.isDisplayed()){
+            cookie.click();
+        }
+
+        try {
+            WebElement viajesPorChile = driver.findElement(localizadorViajesPorChile);
+            wait.until(ExpectedConditions.elementToBeClickable(viajesPorChile));
+            viajesPorChile.click();
+            WebElement verOfertas = driver.findElement(localizadorVerOfertas);
+            wait.until(ExpectedConditions.elementToBeClickable(verOfertas));
+            verOfertas.click();
+            WebElement puertoVaras = driver.findElement(localizadorPaquetePuertoVaras);
+            wait.until(ExpectedConditions.elementToBeClickable(puertoVaras));
+            puertoVaras.click();
+            WebElement paquetePuertoVaras = driver.findElement(localizadorPaquetesAPuertoVaras);
+            wait.until(ExpectedConditions.elementToBeClickable(paquetePuertoVaras));
+            paquetePuertoVaras.click();
+        }  catch (org.openqa.selenium.StaleElementReferenceException ex) {
+            WebElement viajesPorChile = driver.findElement(localizadorViajesPorChile);
+            wait.until(ExpectedConditions.elementToBeClickable(viajesPorChile));
+            viajesPorChile.click();
+            WebElement verOfertas = driver.findElement(localizadorVerOfertas);
+            wait.until(ExpectedConditions.elementToBeClickable(verOfertas));
+            verOfertas.click();
+            WebElement puertoVaras = driver.findElement(localizadorPaquetePuertoVaras);
+            wait.until(ExpectedConditions.elementToBeClickable(puertoVaras));
+            puertoVaras.click();
+            WebElement paquetePuertoVaras = driver.findElement(localizadorPaquetesAPuertoVaras);
+            wait.until(ExpectedConditions.elementToBeClickable(paquetePuertoVaras));
+            paquetePuertoVaras.click();
+        }
+        // ir a otra ventana
+        wait.until(ExpectedConditions.numberOfWindowsToBe(2));
+        driver.switchTo().window(driver.getWindowHandles().toArray()[1].toString());
+       String hola = driver.getTitle();
+        // ir a otra ventana
+        try {
+            WebElement selecionarHotel = driver.findElement(localizadorHotelChile);
+            wait.until(ExpectedConditions.elementToBeClickable(selecionarHotel));
+            selecionarHotel.click();
+        }  catch (org.openqa.selenium.StaleElementReferenceException ex) {
+            WebElement selecionarHotel = driver.findElement(localizadorHotelChile);
+            wait.until(ExpectedConditions.elementToBeClickable(selecionarHotel));
+            selecionarHotel.click();
+        }
+        // ir a otra ventana
+        wait.until(ExpectedConditions.numberOfWindowsToBe(3));
+        driver.switchTo().window(driver.getWindowHandles().toArray()[2].toString());
+        // ir a otra ventana
+        try {
+            WebElement aceptarHotel = driver.findElement(localizadorHotelChile);
+            wait.until(ExpectedConditions.elementToBeClickable(aceptarHotel));
+            aceptarHotel.click();
+        }  catch (org.openqa.selenium.InvalidSelectorException ex) {
+            WebElement aceptarHotel = driver.findElement(localizadorHotelChile);
+            wait.until(ExpectedConditions.elementToBeClickable(aceptarHotel));
+            aceptarHotel.click();
+        }
+        WebElement vueloChile = driver.findElement(localizadorVueloChile);
+        wait.until(ExpectedConditions.elementToBeClickable(vueloChile));
+        vueloChile.click();
+        try {
+            WebElement comprar = driver.findElement(localizadorSiguienteComprar);
+            wait.until(ExpectedConditions.elementToBeClickable(comprar));
+            comprar.click();
+        }  catch (org.openqa.selenium.InvalidSelectorException ex) {
+            WebElement comprar = driver.findElement(localizadorSiguienteComprar);
+            wait.until(ExpectedConditions.elementToBeClickable(comprar));
+            comprar.click();
+        }
+
     }
 
     @Test public void PTC03(){
