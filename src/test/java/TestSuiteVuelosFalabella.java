@@ -63,6 +63,7 @@ public class TestSuiteVuelosFalabella {
     public By localizadorAlianzas = By.xpath("//filter-group[@id=\"filter-alliances\"]");
     public By localizadorOneWorld = By.xpath("(//i[@class=\"checkbox-check eva-3-icon-checkmark filters-checkbox-left\"])[23]");
     public By localizadorDosEscalas = By.xpath("(//i[@class=\"checkbox-check eva-3-icon-checkmark filters-checkbox-left\"])[4]");
+    public By localizadorContinuarVtc02 = By.xpath("//em[text()=\"Continuar\"]");
     @BeforeClass
     public static void init(){
         WebDriverManager.chromedriver().setup();
@@ -168,8 +169,8 @@ public class TestSuiteVuelosFalabella {
 
         int mesViajeIda = 5;
         int mesViajeVuelta = 3;
-        int diaViajeIda = 27;
-        int diaViajeVuelta = 22;
+        int diaViajeIda = 29;
+        int diaViajeVuelta = 24;
         int añoViajeIda = 2022;
         int añoViajeVuelta = 2023;
         String origen = "SCL";
@@ -264,6 +265,9 @@ public class TestSuiteVuelosFalabella {
             wait.until(ExpectedConditions.elementToBeClickable(comprar));
             comprar.click();
         }
+        WebElement continuar = driver.findElement(localizadorContinuarVtc02);
+        wait.until(ExpectedConditions.elementToBeClickable(continuar));
+        continuar.click();
         WebElement volverPaginaAnterior = driver.findElement(localizadorVolverAPaginaAnterior);
         wait.until(ExpectedConditions.elementToBeClickable(volverPaginaAnterior));
         volverPaginaAnterior.click();
