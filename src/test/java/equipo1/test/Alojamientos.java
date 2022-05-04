@@ -39,17 +39,5 @@ public class Alojamientos extends JunitBaseTest {
         Assert.assertEquals("Todos los alojamientos en Kiev están reservados.", AlojamientosFalabellaPage.resultadoError());
     }
 
-    @Test
-    public  void  noHayDisponibilidad(){
-        AlojamientosFalabellaPage = new AlojamientosFalabellaPage(driver);
-        AlojamientosFalabellaPage.irAlojamientosFalabella();
-        AlojamientosFalabellaPage.aceptarCookies();
-        AlojamientosFalabellaPage.ingresarDestino("kiev");
-        AlojamientosFalabellaPage.ingresarFechaIda(1, 2022, 6);
-        AlojamientosFalabellaPage.ingresarFechaVuelta(16, 2022, 6, 2022, 6);
-        AlojamientosFalabellaPage.aplicarFecha();
-        AlojamientosFalabellaPage.selecionarPasajerosAdultos(2);
-        AlojamientosFalabellaPage.buscarAlojamiento();
-        Assert.assertEquals("Todos los alojamientos en Kiev están reservados.", AlojamientosFalabellaPage.resultadoError());
-    }
+
 }

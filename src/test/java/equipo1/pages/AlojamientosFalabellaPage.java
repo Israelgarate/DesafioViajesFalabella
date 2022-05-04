@@ -24,10 +24,11 @@ public class AlojamientosFalabellaPage extends SeleniumBasePage {
     By localizadorBtnAplicarDate = By.xpath("//button[@class=\"_dpmg2--desktopFooter-button _dpmg2--desktopFooter-button-apply sbox-3-btn -lg -primary\"]");
     By localizadorBtnBuscar = By.xpath("(//div [@class = \"sbox-button-container\"] )[1]");
     By localizadorResultado = By.xpath("//div[@class=\"accommodations-in-other-destination-message-wrapper -eva-3-tc\"]");
-    public By localizadorPasajeros = By.xpath("(//div[contains(@class, \"sbox-guests-container\")])[1]");
-    public By localizadorAumentarAdultos = By.xpath("(//a[@class = \"steppers-icon-right sbox-3-icon-plus\"])[1]");
-    public By localizadorBtnAplicarPasajeros = By.xpath("//a[text() =\"Aplicar\"]");
-    public By localizadorMensajeDeError = By.xpath("//h5[@class =\"message-title eva-3-h5\"]");
+    By localizadorPasajeros = By.xpath("(//div[contains(@class, \"sbox-guests-container\")])[1]");
+    By localizadorAumentarAdultos = By.xpath("(//a[@class = \"steppers-icon-right sbox-3-icon-plus\"])[1]");
+    By localizadorBtnAplicarPasajeros = By.xpath("//a[text() =\"Aplicar\"]");
+    By localizadorMensajeDeError = By.xpath("//h5[@class =\"message-title eva-3-h5\"]");
+    By localizadorHotelAgotado = By.xpath("//p[contains(text(),\"Todas las\")]");
 
     //funciones o acciones que podemos hacer en la web -> buscar en barra google
     public void irAlojamientosFalabella(){
@@ -120,5 +121,9 @@ public class AlojamientosFalabellaPage extends SeleniumBasePage {
 
     public  String resultadoError(){
         return getText(localizadorMensajeDeError);
+    }
+
+    public boolean Agotado(){
+        return isDisplayed(localizadorHotelAgotado);
     }
 }

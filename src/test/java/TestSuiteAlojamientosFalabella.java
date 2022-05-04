@@ -234,8 +234,8 @@ public class TestSuiteAlojamientosFalabella {
     @Test public void ATC03() throws InterruptedException {
         int mesViajeIda = 5;
         int mesViajeVuelta = 5;
-        int diaViajeIda = 1;
-        int diaViajeVuelta = 7;
+        int diaViajeIda = 10;
+        int diaViajeVuelta = 17;
         int añoViajeIda = 2022;
         int añoViajeVuelta = 2022;
 
